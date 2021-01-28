@@ -11,7 +11,7 @@ const App = () => {
   const [count, setCount] = useState();
 
   useEffect(() => {
-    socket = io("localhost:3333");
+    socket = io("avalonconnect-server.herokuapp.com");
     // socket.emit("here");
     console.log("SOCKET", socket);
 
