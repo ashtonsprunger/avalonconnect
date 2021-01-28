@@ -1,0 +1,13 @@
+Input {
+  text-transform: uppercase;
+}
+
+Form {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+}
+
+Label {
+  width: 100%;
+}

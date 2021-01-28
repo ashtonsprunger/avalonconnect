@@ -1,0 +1,59 @@
+import "./App.css";
+import { useState, useEffect } from "react";
+import queryString from "querystring";
+import io from "socket.io-client";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+
+import Game from "./Components/Game";
+import Join from "./Components/Join/Join";
+import Host from "./Components/Host";
+
+let socket;
+
+const App = () => {
+  // const socketRef = useRef();
+  const [inRoom, setInRoom] = useState(false);
+
+  useEffect(() => {
+    // socket = io("avalonconnect-server.herokuapp.com"); //! CHANGE BEFORE PUSHING
+    socket = io("localhost:3333");
+    // socket.emit("here");
+    console.log("SOCKET:", socket);
+
+    // socket.on("count", (count) => {
+    //   setCount(count);
+    // });
+  }, []);
+
+  return (
+    <div className="App">
+      <Router>
+        <Switch>
+          <Route exact path="/join">
+            <Join />
+          </Route>
+          <Route exact path="/host">
+            <Host />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/join" />
+          </Route>
+          <Route path="/game/:username/:room">
+            <Game />
+          </Route>
+          <Route>
+            <Redirect to="/join" />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
+  );
+};
+
+export default App;
