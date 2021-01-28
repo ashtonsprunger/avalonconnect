@@ -1,59 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Form, FormGroup, Input, Label } from "reactstrap";
-import "./Join.css";
+import "./Host.css";
 
-const Join = () => {
+const Host = () => {
   const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(makeid(4));
+
+  function makeid(length) {
+    var result = "";
+    var characters = "abcdefghijklmnopqrstuvwxyz";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
+  useEffect(() => {}, []);
+
   return (
-    <div className="joinWrapper">
+    <div>
       <Form onSubmit={handleSubmit}>
-        <h2>Join a Game</h2>
+        <h2>Host a Game</h2>
         <FormGroup className="formGroup">
           <Label>
             NAME
             <Input
-              className="joinUsername"
+              className="hostUsername"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter name..."
-            />
-          </Label>
-        </FormGroup>
-        <FormGroup className="formGroup">
-          <Label>
-            GAME CODE
-            <Input
-              className="joinRoom"
-              value={room}
-              onChange={(e) => setRoom(e.target.value)}
-              placeholder="Enter game code..."
+              required
             />
           </Label>
         </FormGroup>
         <Link
-          className="joinGame"
+          className="hostGame"
           onClick={(e) =>
             !room || !username
               ? e.preventDefault()
               : room.length == 4
               ? null
-              : (alert("GAME CODE MUST BE 4 DIGITS!!"), e.preventDefault())
+              : (alert("Error!"), e.preventDefault())
           }
-          to={`/game/${username}/${room}/false`}
+          to={`/game/${username}/${room}/true`}
         >
-          JOIN
+          HOST
         </Link>
       </Form>
-      <Link to="/host">host a game</Link>
+      <Link to="/join">join a game</Link>
     </div>
   );
 };
 
-export default Join;
+export default Host;

@@ -1,0 +1,18 @@
+.room {
+  font-size: 75px;
+  border: 2px solid black;
+  border-radius: 20px;
+  width: fit-content;
+  margin: auto;
+  padding: 0 15px 5px;
+  background-color: rgb(255, 188, 188);
+  margin-bottom: 15px;
+}
+
+.gameWrapper {
+  padding: 2em;
+}
+
+.hosting {
+  color: red;
+}

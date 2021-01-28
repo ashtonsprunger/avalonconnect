@@ -1,0 +1,14 @@
+.hostGame {
+  font-size: 30px;
+  background-color: black;
+  width: fit-content;
+  margin: auto;
+  padding: 5px 15px 6px;
+  color: white;
+  border-radius: 10px;
+}
+
+.hostGame:hover {
+  color: white;
+  text-decoration: none;
+}
