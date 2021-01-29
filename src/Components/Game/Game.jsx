@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button } from "reactstrap";
 import io from "socket.io-client";
 import "./Game.css";
+
+import Waiting from "./GameComponents/Waiting";
 
 let socket;
 
@@ -10,10 +13,11 @@ const Game = () => {
   const [room, setRoom] = useState(useParams().room.toUpperCase());
   const [users, setUsers] = useState([]);
   const [host, setHost] = useState(useParams().host === "true" ? true : false);
+  const [render, setRender] = useState("waiting");
 
   useEffect(() => {
-    socket = io("avalonconnect-server.herokuapp.com"); //! CHANGE BEFORE PUSHING
-    // socket = io("localhost:3333");
+    socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
+    // socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
 
     //! joining the game room
@@ -24,21 +28,26 @@ const Game = () => {
     });
   }, []);
 
+  const changeRender = (newRender) => {
+    setRender(newRender);
+  };
+
   return (
     <div className="gameWrapper">
-      <h1 class="room">{room}</h1>
-      {host ? (
-        <h5 className="hosting">you are hosting</h5>
-      ) : (
-        <h5>waiting for host to begin game...</h5>
-      )}
-      {users.map((user) => {
-        return (
-          <h2 style={{ color: `${socket.id == user.id ? "blue" : "black"}` }}>
-            {user.username}
-          </h2>
-        );
-      })}
+      {render === "waiting" ? (
+        socket ? (
+          <Waiting
+            changeRender={changeRender}
+            host={host}
+            room={room}
+            users={users}
+            setUsers={setUsers}
+            socket={socket}
+          />
+        ) : null
+      ) : render === "team" ? (
+        <h2>TEAM</h2>
+      ) : null}
     </div>
   );
 };
