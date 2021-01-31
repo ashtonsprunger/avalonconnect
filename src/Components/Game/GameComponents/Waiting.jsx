@@ -16,7 +16,7 @@ const Waiting = (props) => {
       percivalMorgana: percivalMorgana,
       oberon: oberon,
     });
-    props.changeRender("team");
+    props.changeRender("roll");
   };
 
   const handlePercivalMorganaClick = (e) => {
