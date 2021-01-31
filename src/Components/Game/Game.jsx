@@ -20,8 +20,8 @@ const Game = () => {
   const [sees, setSees] = useState();
 
   useEffect(() => {
-    // socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
-    socket = io("localhost:3333"); //! FOR LOCAL
+    socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
+    // socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
 
     //! joining the game room
