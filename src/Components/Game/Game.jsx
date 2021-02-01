@@ -18,6 +18,10 @@ const Game = () => {
   const [render, setRender] = useState("waiting");
   const [roll, setRoll] = useState();
   const [sees, setSees] = useState();
+  const [king, setKing] = useState();
+  const [onTeam, setOnTeam] = useState([]);
+  const [gameInfo, setGameInfo] = useState();
+  const [currentMission, setCurrentMission] = useState(1);
 
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
@@ -32,21 +36,42 @@ const Game = () => {
     });
 
     socket.on("newRender", newRender);
+    socket.on("newKing", newKing);
+    socket.on("newOnTeam", newOnTeam);
 
     socket.on("charReveal", ({ roll, sees }) => {
       setSees(sees);
       setRoll(roll);
       console.log("roll, sees:", roll, sees);
     });
+    socket.on("gameInfo", setGameInfo);
   }, []);
 
   const newRender = (newR) => {
     setRender(newR);
   };
 
+  const newOnTeam = (newO) => {
+    setOnTeam(newO);
+  };
+
+  const changeOnTeam = (newO) => {
+    setOnTeam(newO);
+    socket.emit("changeOnTeam", newO);
+  };
+
   const changeRender = (newR) => {
     setRender(newR);
     socket.emit("changeRender", newR);
+  };
+
+  const newKing = (newK) => {
+    setKing(newK);
+  };
+
+  const changeKing = (newK) => {
+    setKing(newK);
+    socket.emit("changeKing", newK);
   };
 
   return (
@@ -63,7 +88,15 @@ const Game = () => {
           />
         ) : null
       ) : render === "team" ? (
-        <Team />
+        <Team
+          onTeam={onTeam}
+          changeOnTeam={changeOnTeam}
+          king={king}
+          socket={socket}
+          users={users}
+          gameInfo={gameInfo}
+          currentMission={currentMission}
+        />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
       ) : null}
