@@ -14,6 +14,7 @@ const Game = () => {
   const [username, setUsername] = useState(useParams().username.toUpperCase());
   const [room, setRoom] = useState(useParams().room.toUpperCase());
   const [users, setUsers] = useState([]);
+  const [rollOpen, setRollOpen] = useState(true);
   const [host, setHost] = useState(useParams().host === "true" ? true : false);
   const [render, setRender] = useState("waiting");
   const [roll, setRoll] = useState();
@@ -22,10 +23,11 @@ const Game = () => {
   const [onTeam, setOnTeam] = useState([]);
   const [gameInfo, setGameInfo] = useState();
   const [currentMission, setCurrentMission] = useState(1);
+  const [voting, setVoting] = useState(false);
 
   useEffect(() => {
-    socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
-    // socket = io("localhost:3333"); //! FOR LOCAL
+    // socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
+    socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
 
     //! joining the game room
@@ -45,6 +47,7 @@ const Game = () => {
       console.log("roll, sees:", roll, sees);
     });
     socket.on("gameInfo", setGameInfo);
+    socket.on("callVote", () => setVoting(true));
   }, []);
 
   const newRender = (newR) => {
@@ -74,8 +77,21 @@ const Game = () => {
     socket.emit("changeKing", newK);
   };
 
+  const toggleRoll = () => {
+    setRollOpen(!rollOpen);
+  };
+
   return (
     <div className="gameWrapper">
+      {render !== "waiting" ? (
+        <>
+          <h2>
+            <Button onClick={toggleRoll}>
+              {rollOpen ? "GOT IT" : username.trim().toUpperCase()}
+            </Button>
+          </h2>
+        </>
+      ) : null}
       {render === "waiting" ? (
         socket ? (
           <Waiting
@@ -85,8 +101,11 @@ const Game = () => {
             users={users}
             setUsers={setUsers}
             socket={socket}
+            setRollOpen={setRollOpen}
           />
         ) : null
+      ) : rollOpen ? (
+        <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
       ) : render === "team" ? (
         <Team
           onTeam={onTeam}
@@ -96,6 +115,8 @@ const Game = () => {
           users={users}
           gameInfo={gameInfo}
           currentMission={currentMission}
+          voting={voting}
+          setVoting={setVoting}
         />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />

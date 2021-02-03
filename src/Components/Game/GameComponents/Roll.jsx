@@ -42,7 +42,6 @@ const Roll = (props) => {
             </>
           ))
         : null}
-      <Button onClick={() => props.newRender("team")}>Done</Button>
     </div>
   );
 };

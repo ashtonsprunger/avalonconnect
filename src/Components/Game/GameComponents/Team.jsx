@@ -11,8 +11,13 @@ const Team = (props) => {
     return [false, -1];
   };
 
+  const callVote = () => {
+    props.socket.emit("callVote");
+    props.setVoting(true);
+  };
+
   const toggleOnTeam = (user) => {
-    if (props.socket.id === props.king.id) {
+    if (props.socket.id === props.king.id && !props.voting) {
       if (userInUsers(user, props.onTeam)[0]) {
         props.changeOnTeam(
           props.onTeam.filter((person) => person.id !== user.id)
@@ -53,8 +58,15 @@ const Team = (props) => {
         </h2>
       ))}
       {props.gameInfo.teams[props.currentMission - 1] == props.onTeam.length &&
-      props.socket.id === props.king.id ? (
-        <Button>Call for a vote</Button>
+      props.socket.id === props.king.id &&
+      !props.voting ? (
+        <Button onClick={callVote}>Call for a vote</Button>
+      ) : null}
+      {props.voting ? (
+        <>
+          <Button color="success">ACCEPT</Button>
+          <Button color="danger">REJECT</Button>
+        </>
       ) : null}
     </div>
   );
