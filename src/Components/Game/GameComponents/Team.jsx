@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "reactstrap";
 
 const Team = (props) => {
+  const handleAccept = () => {
+    props.addToAccepted(
+      props.users.filter((user) => user.id === props.socket.id)[0]
+    );
+  };
+
+  const handleReject = () => {
+    props.addToRejected(
+      props.users.filter((user) => user.id === props.socket.id)[0]
+    );
+  };
+
   const userInUsers = (user, users) => {
     for (let i = 0; i < users.length; i++) {
       if (users[i].id === user.id) {
@@ -64,10 +76,26 @@ const Team = (props) => {
       ) : null}
       {props.voting ? (
         <>
-          <Button color="success">ACCEPT</Button>
-          <Button color="danger">REJECT</Button>
+          <Button color="success" onClick={handleAccept}>
+            ACCEPT
+          </Button>
+          <Button color="danger" onClick={handleReject}>
+            REJECT
+          </Button>
         </>
       ) : null}
+      <h4>accepted</h4>
+      {props.acceptedPeople.length > 0
+        ? props.acceptedPeople.map((person) => (
+            <p>{person.username.toUpperCase()}</p>
+          ))
+        : "none"}
+      <h4>rejected</h4>
+      {props.rejectedPeople.length > 0
+        ? props.rejectedPeople.map((person) => (
+            <p>{person.username.toUpperCase()}</p>
+          ))
+        : "none"}
     </div>
   );
 };

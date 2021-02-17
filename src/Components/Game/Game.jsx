@@ -21,13 +21,15 @@ const Game = () => {
   const [sees, setSees] = useState();
   const [king, setKing] = useState();
   const [onTeam, setOnTeam] = useState([]);
+  const [acceptedPeople, setAcceptedPeople] = useState([]);
+  const [rejectedPeople, setRejectedPeople] = useState([]);
   const [gameInfo, setGameInfo] = useState();
   const [currentMission, setCurrentMission] = useState(1);
   const [voting, setVoting] = useState(false);
 
   useEffect(() => {
-    // socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
-    socket = io("localhost:3333"); //! FOR LOCAL
+    socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
+    // socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
 
     //! joining the game room
@@ -40,6 +42,8 @@ const Game = () => {
     socket.on("newRender", newRender);
     socket.on("newKing", newKing);
     socket.on("newOnTeam", newOnTeam);
+    socket.on("newRejected", newRejected);
+    socket.on("newAccepted", newAccepted);
 
     socket.on("charReveal", ({ roll, sees }) => {
       setSees(sees);
@@ -61,6 +65,26 @@ const Game = () => {
   const changeOnTeam = (newO) => {
     setOnTeam(newO);
     socket.emit("changeOnTeam", newO);
+  };
+
+  const newRejected = (newR) => {
+    // setRejectedPeople([...rejectedPeople, newR]);
+    setRejectedPeople([...rejectedPeople]);
+  };
+
+  const newAccepted = (newA) => {
+    // setAcceptedPeople([...acceptedPeople, newA]);
+    setAcceptedPeople([...acceptedPeople, newA]);
+  };
+
+  const addToRejected = (newR) => {
+    setRejectedPeople([...rejectedPeople, newR]);
+    socket.emit("addToRejected", newR);
+  };
+
+  const addToAccepted = (newA) => {
+    setAcceptedPeople([...acceptedPeople, newA]);
+    socket.emit("addToAccepted", newA);
   };
 
   const changeRender = (newR) => {
@@ -110,6 +134,10 @@ const Game = () => {
         <Team
           onTeam={onTeam}
           changeOnTeam={changeOnTeam}
+          rejectedPeople={rejectedPeople}
+          addToRejected={addToRejected}
+          acceptedPeople={acceptedPeople}
+          addToAccepted={addToAccepted}
           king={king}
           socket={socket}
           users={users}
