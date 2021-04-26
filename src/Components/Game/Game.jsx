@@ -68,22 +68,26 @@ const Game = () => {
   };
 
   const newRejected = (newR) => {
-    // setRejectedPeople([...rejectedPeople, newR]);
-    setRejectedPeople([...rejectedPeople]);
+    console.log("NEW:", newR);
+    console.log("OLD:", rejectedPeople);
+    setRejectedPeople(newR);
+    console.log("after:", rejectedPeople);
   };
 
   const newAccepted = (newA) => {
-    // setAcceptedPeople([...acceptedPeople, newA]);
-    setAcceptedPeople([...acceptedPeople, newA]);
+    console.log("NEW:", newA);
+    console.log("OLD:", acceptedPeople);
+    setAcceptedPeople(newA);
+    console.log("after:", acceptedPeople);
   };
 
   const addToRejected = (newR) => {
-    setRejectedPeople([...rejectedPeople, newR]);
+    // setRejectedPeople([...rejectedPeople, newR]);
     socket.emit("addToRejected", newR);
   };
 
   const addToAccepted = (newA) => {
-    setAcceptedPeople([...acceptedPeople, newA]);
+    // setAcceptedPeople([...acceptedPeople, newA]);
     socket.emit("addToAccepted", newA);
   };
 
