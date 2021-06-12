@@ -3,15 +3,19 @@ import { Button } from "reactstrap";
 
 const Team = (props) => {
   const handleAccept = () => {
-    props.addToAccepted(
-      props.users.filter((user) => user.id === props.socket.id)[0]
-    );
+    if (!props.displayVote) {
+      props.addToAccepted(
+        props.users.filter((user) => user.id === props.socket.id)[0]
+      );
+    }
   };
 
   const handleReject = () => {
-    props.addToRejected(
-      props.users.filter((user) => user.id === props.socket.id)[0]
-    );
+    if (!props.displayVote) {
+      props.addToRejected(
+        props.users.filter((user) => user.id === props.socket.id)[0]
+      );
+    }
   };
 
   const userInUsers = (user, users) => {
@@ -71,7 +75,8 @@ const Team = (props) => {
       ))}
       {props.gameInfo.teams[props.currentMission - 1] == props.onTeam.length &&
       props.socket.id === props.king.id &&
-      !props.voting ? (
+      !props.voting &&
+      !props.displayVote ? (
         <Button onClick={callVote}>Call for a vote</Button>
       ) : null}
       {props.voting ? (
@@ -84,18 +89,41 @@ const Team = (props) => {
           </Button>
         </>
       ) : null}
-      <h4>accepted</h4>
-      {props.acceptedPeople.length > 0
-        ? props.acceptedPeople.map((person) => (
-            <p>{person.username.toUpperCase()}</p>
-          ))
-        : "none"}
-      <h4>rejected</h4>
-      {props.rejectedPeople.length > 0
-        ? props.rejectedPeople.map((person) => (
-            <p>{person.username.toUpperCase()}</p>
-          ))
-        : "none"}
+      {props.voting == true
+        ? props.acceptedPeople.filter((item) => item.id == props.socket.id)
+            .length == 1
+          ? "You are accepting..."
+          : props.rejectedPeople.filter((item) => item.id == props.socket.id)
+              .length == 1
+          ? "You are rejecting..."
+          : null
+        : props.acceptedPeople.filter((item) => item.id == props.socket.id)
+            .length == 1
+        ? "You accepted"
+        : props.rejectedPeople.filter((item) => item.id == props.socket.id)
+            .length == 1
+        ? "You rejected"
+        : props.displayVote
+        ? "You didn't vote"
+        : null}
+      {props.displayVote ? (
+        <>
+          <h4>Accepted</h4>
+          {props.acceptedPeople.length > 0
+            ? props.acceptedPeople.map((person) => (
+                <p>{person.username.toUpperCase()}</p>
+              ))
+            : "none"}
+          <h4>Rejected</h4>
+          {props.rejectedPeople.length > 0
+            ? props.rejectedPeople.map((person) => (
+                <p>{person.username.toUpperCase()}</p>
+              ))
+            : "none"}
+        </>
+      ) : props.voting ? (
+        "counting down..."
+      ) : null}
     </div>
   );
 };

@@ -26,6 +26,7 @@ const Game = () => {
   const [gameInfo, setGameInfo] = useState();
   const [currentMission, setCurrentMission] = useState(1);
   const [voting, setVoting] = useState(false);
+  const [displayVote, setDisplayVote] = useState(false);
 
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
@@ -42,8 +43,9 @@ const Game = () => {
     socket.on("newRender", newRender);
     socket.on("newKing", newKing);
     socket.on("newOnTeam", newOnTeam);
-    socket.on("newRejected", newRejected);
-    socket.on("newAccepted", newAccepted);
+    socket.on("newAcceptedRejected", newAcceptedRejected);
+
+    socket.on("showVote", showVote);
 
     socket.on("charReveal", ({ roll, sees }) => {
       setSees(sees);
@@ -52,6 +54,7 @@ const Game = () => {
     });
     socket.on("gameInfo", setGameInfo);
     socket.on("callVote", () => setVoting(true));
+    socket.on("voting", setVoting);
   }, []);
 
   const newRender = (newR) => {
@@ -67,18 +70,13 @@ const Game = () => {
     socket.emit("changeOnTeam", newO);
   };
 
-  const newRejected = (newR) => {
-    console.log("NEW:", newR);
-    console.log("OLD:", rejectedPeople);
-    setRejectedPeople(newR);
-    console.log("after:", rejectedPeople);
+  const newAcceptedRejected = (newAR) => {
+    setAcceptedPeople(newAR.accepted);
+    setRejectedPeople(newAR.rejected);
   };
 
-  const newAccepted = (newA) => {
-    console.log("NEW:", newA);
-    console.log("OLD:", acceptedPeople);
-    setAcceptedPeople(newA);
-    console.log("after:", acceptedPeople);
+  const showVote = (show) => {
+    setDisplayVote(show);
   };
 
   const addToRejected = (newR) => {
@@ -149,6 +147,7 @@ const Game = () => {
           currentMission={currentMission}
           voting={voting}
           setVoting={setVoting}
+          displayVote={displayVote}
         />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
