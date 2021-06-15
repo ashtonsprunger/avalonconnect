@@ -27,6 +27,8 @@ const Game = () => {
   const [currentMission, setCurrentMission] = useState(1);
   const [voting, setVoting] = useState(false);
   const [displayVote, setDisplayVote] = useState(false);
+  const [kingStarted, setKingStarted] = useState(false);
+  const [lastRound, setLastRound] = useState();
 
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
@@ -96,11 +98,22 @@ const Game = () => {
 
   const newKing = (newK) => {
     setKing(newK);
+    console.log(`The new king is ${newK}`);
   };
 
   const changeKing = (newK) => {
     setKing(newK);
     socket.emit("changeKing", newK);
+  };
+
+  const nextKing = () => {
+    setLastRound({
+      king: king,
+      onTeam: onTeam,
+      rejectedPeople: rejectedPeople,
+      acceptedPeople: acceptedPeople,
+    });
+    socket.emit("nextKing");
   };
 
   const toggleRoll = () => {
@@ -148,6 +161,12 @@ const Game = () => {
           voting={voting}
           setVoting={setVoting}
           displayVote={displayVote}
+          setDisplayVote={setDisplayVote}
+          nextKing={nextKing}
+          kingStarted={kingStarted}
+          setKingStarted={setKingStarted}
+          lastRound={lastRound}
+          setLastRound={setLastRound}
         />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />

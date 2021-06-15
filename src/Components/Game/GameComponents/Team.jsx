@@ -1,7 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 
 const Team = (props) => {
+  useEffect(() => {
+    if (
+      props.kingStarted &&
+      props.voting == false &&
+      props.displayVote == true
+    ) {
+      if (props.rejectedPeople >= props.acceptedPeople) {
+        props.setDisplayVote(false);
+        props.setKingStarted(false);
+        props.nextKing();
+      }
+    }
+  });
+
   const handleAccept = () => {
     if (!props.displayVote) {
       props.addToAccepted(
@@ -30,6 +44,7 @@ const Team = (props) => {
   const callVote = () => {
     props.socket.emit("callVote");
     props.setVoting(true);
+    props.setKingStarted(true);
   };
 
   const toggleOnTeam = (user) => {
