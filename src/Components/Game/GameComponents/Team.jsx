@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 
+import LastRound from "./LastRound";
+
 const Team = (props) => {
   useEffect(() => {
     if (
@@ -8,13 +10,21 @@ const Team = (props) => {
       props.voting == false &&
       props.displayVote == true
     ) {
-      if (props.rejectedPeople >= props.acceptedPeople) {
+      if (props.rejectedPeople.length >= props.acceptedPeople.length) {
+        console.log("DISPLAY VOTE:", props.displayVote);
         props.setDisplayVote(false);
+        console.log("DISPLAY VOTE:", props.displayVote);
         props.setKingStarted(false);
-        props.nextKing();
+        if (props.king.id == props.socket.id) {
+          props.nextKing();
+        }
       }
     }
-  });
+  }, [props.displayVote, props.voting]);
+
+  useEffect(() => {
+    console.log(`Here is the displayVote: ${props.displayVote}`);
+  }, [props.displayVote]);
 
   const handleAccept = () => {
     if (!props.displayVote) {
@@ -43,8 +53,8 @@ const Team = (props) => {
 
   const callVote = () => {
     props.socket.emit("callVote");
-    props.setVoting(true);
-    props.setKingStarted(true);
+    // props.setVoting(true);
+    // props.setKingStarted(true);
   };
 
   const toggleOnTeam = (user) => {
@@ -139,6 +149,7 @@ const Team = (props) => {
       ) : props.voting ? (
         "counting down..."
       ) : null}
+      <LastRound lastRound={props.lastRound} />
     </div>
   );
 };

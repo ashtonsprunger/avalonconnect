@@ -55,9 +55,15 @@ const Game = () => {
       console.log("roll, sees:", roll, sees);
     });
     socket.on("gameInfo", setGameInfo);
-    socket.on("callVote", () => setVoting(true));
+    socket.on("callVote", callVote);
     socket.on("voting", setVoting);
+    socket.on("lastRound", setLastRound);
   }, []);
+
+  const callVote = () => {
+    setKingStarted(true);
+    setVoting(true);
+  };
 
   const newRender = (newR) => {
     setRender(newR);
@@ -107,7 +113,7 @@ const Game = () => {
   };
 
   const nextKing = () => {
-    setLastRound({
+    socket.emit("lastRound", {
       king: king,
       onTeam: onTeam,
       rejectedPeople: rejectedPeople,
