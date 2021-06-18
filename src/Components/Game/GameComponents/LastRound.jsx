@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "reactstrap";
 
 const LastRound = (props) => {
   return (
@@ -8,6 +9,14 @@ const LastRound = (props) => {
       <br />
       {props.lastRound ? (
         <>
+          {props.missions.map((mission) => {
+            return (
+              <Button
+                disabled="true"
+                color={mission ? "success" : "danger"}
+              ></Button>
+            );
+          })}
           <h4>The last king was {props.lastRound.king.username}</h4>
           <h5>On the team:</h5>
           {props.lastRound.onTeam.map((person) => {

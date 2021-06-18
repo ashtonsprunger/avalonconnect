@@ -66,13 +66,15 @@ const Waiting = (props) => {
             onClick={handlePercivalMorganaClick}
           >
             Percival/Morgana
-          </Button>
+          </Button>{" "}
           <Button
             style={{ backgroundColor: "green" }}
             onClick={handleOberonClick}
           >
             Oberon
           </Button>
+          <br />
+          <br />
           <Button onClick={startGame}>START GAME</Button>
         </>
       ) : null}

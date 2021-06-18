@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 
 import LastRound from "./LastRound";
+import PassFail from "./PassFail";
 
 const Team = (props) => {
   useEffect(() => {
@@ -18,6 +19,14 @@ const Team = (props) => {
         if (props.king.id == props.socket.id) {
           props.nextKing();
         }
+      } else {
+        props.setPassFail(true);
+        props.setLastRound({
+          king: props.king,
+          onTeam: props.onTeam,
+          rejectedPeople: props.rejectedPeople,
+          acceptedPeople: props.acceptedPeople,
+        });
       }
     }
   }, [props.displayVote, props.voting]);
@@ -25,6 +34,41 @@ const Team = (props) => {
   useEffect(() => {
     console.log(`Here is the displayVote: ${props.displayVote}`);
   }, [props.displayVote]);
+
+  useEffect(() => {
+    if (
+      props.onTeam.length > 0 &&
+      props.passesFails.length == props.onTeam.length &&
+      props.king.id == props.socket.id
+    ) {
+      let passes = 0;
+      let fails = 0;
+      let passed;
+      for (let i = 0; i < props.passesFails.length; i++) {
+        if (props.passesFails[i]) {
+          passes++;
+        } else {
+          fails++;
+        }
+      }
+      if (props.gameInfo.twoFails && props.currentMission == 4) {
+        if (fails < 2) {
+          passed = true;
+        } else {
+          passed = false;
+        }
+      } else {
+        if (fails == 0) {
+          passed = true;
+        } else {
+          passed = false;
+        }
+      }
+      props.addMission(passed, props.currentMission);
+      props.nextKing();
+      console.log("addMission", passed, props.currentMission);
+    }
+  }, [props.passesFails]);
 
   const handleAccept = () => {
     if (!props.displayVote) {
@@ -58,7 +102,7 @@ const Team = (props) => {
   };
 
   const toggleOnTeam = (user) => {
-    if (props.socket.id === props.king.id && !props.voting) {
+    if (props.socket.id === props.king.id && !props.voting && !props.passFail) {
       if (userInUsers(user, props.onTeam)[0]) {
         props.changeOnTeam(
           props.onTeam.filter((person) => person.id !== user.id)
@@ -98,6 +142,14 @@ const Team = (props) => {
           {user.username}
         </h2>
       ))}
+      <PassFail
+        onTeam={props.onTeam}
+        roll={props.roll}
+        passFail={props.passFail}
+        socket={props.socket}
+        addToPass={props.addToPass}
+        addToFail={props.addToFail}
+      />
       {props.gameInfo.teams[props.currentMission - 1] == props.onTeam.length &&
       props.socket.id === props.king.id &&
       !props.voting &&
@@ -113,6 +165,14 @@ const Team = (props) => {
             REJECT
           </Button>
         </>
+      ) : null}
+      {props.passFail == true ? (
+        props.onTeam.filter((person) => person.id == props.socket.id).length ==
+        1 ? (
+          <h4>You are on the team</h4>
+        ) : (
+          <h4>You aren't on the team</h4>
+        )
       ) : null}
       {props.voting == true
         ? props.acceptedPeople.filter((item) => item.id == props.socket.id)
@@ -149,7 +209,7 @@ const Team = (props) => {
       ) : props.voting ? (
         "counting down..."
       ) : null}
-      <LastRound lastRound={props.lastRound} />
+      <LastRound lastRound={props.lastRound} missions={props.missions} />
     </div>
   );
 };

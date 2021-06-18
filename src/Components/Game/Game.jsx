@@ -25,14 +25,17 @@ const Game = () => {
   const [rejectedPeople, setRejectedPeople] = useState([]);
   const [gameInfo, setGameInfo] = useState();
   const [currentMission, setCurrentMission] = useState(1);
+  const [missions, setMissions] = useState([]);
   const [voting, setVoting] = useState(false);
   const [displayVote, setDisplayVote] = useState(false);
   const [kingStarted, setKingStarted] = useState(false);
+  const [passFail, setPassFail] = useState(false);
+  const [passesFails, setPassesFails] = useState([]);
   const [lastRound, setLastRound] = useState();
 
   useEffect(() => {
-    socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
-    // socket = io("localhost:3333"); //! FOR LOCAL
+    // socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
+    socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
 
     //! joining the game room
@@ -46,6 +49,7 @@ const Game = () => {
     socket.on("newKing", newKing);
     socket.on("newOnTeam", newOnTeam);
     socket.on("newAcceptedRejected", newAcceptedRejected);
+    socket.on("newPassFail", setPassesFails);
 
     socket.on("showVote", showVote);
 
@@ -58,6 +62,7 @@ const Game = () => {
     socket.on("callVote", callVote);
     socket.on("voting", setVoting);
     socket.on("lastRound", setLastRound);
+    socket.on("missions", setMissions);
   }, []);
 
   const callVote = () => {
@@ -95,6 +100,21 @@ const Game = () => {
   const addToAccepted = (newA) => {
     // setAcceptedPeople([...acceptedPeople, newA]);
     socket.emit("addToAccepted", newA);
+  };
+
+  const addToPass = () => {
+    socket.emit("addToPass");
+  };
+
+  const addToFail = () => {
+    socket.emit("addToFail");
+  };
+
+  const addMission = (passed, mission) => {
+    socket.emit("mission", {
+      passed,
+      mission,
+    });
   };
 
   const changeRender = (newR) => {
@@ -173,6 +193,15 @@ const Game = () => {
           setKingStarted={setKingStarted}
           lastRound={lastRound}
           setLastRound={setLastRound}
+          passFail={passFail}
+          setPassFail={setPassFail}
+          passesFails={passesFails}
+          setPassesFails={setPassesFails}
+          roll={roll}
+          addToPass={addToPass}
+          addToFail={addToFail}
+          addMission={addMission}
+          missions={missions}
         />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
