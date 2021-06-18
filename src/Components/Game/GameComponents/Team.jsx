@@ -65,6 +65,7 @@ const Team = (props) => {
         }
       }
       props.addMission(passed, props.currentMission);
+      //! Left off here
       props.nextKing();
       console.log("addMission", passed, props.currentMission);
     }
