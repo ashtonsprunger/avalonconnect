@@ -50,6 +50,7 @@ const Game = () => {
     socket.on("newOnTeam", newOnTeam);
     socket.on("newAcceptedRejected", newAcceptedRejected);
     socket.on("newPassFail", setPassesFails);
+    socket.on("newPassFailSingle", setPassFail);
 
     socket.on("showVote", showVote);
 
@@ -63,6 +64,7 @@ const Game = () => {
     socket.on("voting", setVoting);
     socket.on("lastRound", setLastRound);
     socket.on("missions", setMissions);
+    socket.on("currentMission", setCurrentMission);
   }, []);
 
   const callVote = () => {
@@ -81,6 +83,10 @@ const Game = () => {
   const changeOnTeam = (newO) => {
     setOnTeam(newO);
     socket.emit("changeOnTeam", newO);
+  };
+
+  const newPassFail = (newPF) => {
+    socket.emit(newPF);
   };
 
   const newAcceptedRejected = (newAR) => {
@@ -102,12 +108,12 @@ const Game = () => {
     socket.emit("addToAccepted", newA);
   };
 
-  const addToPass = () => {
-    socket.emit("addToPass");
+  const addToPass = (person) => {
+    socket.emit("addToPass", person);
   };
 
-  const addToFail = () => {
-    socket.emit("addToFail");
+  const addToFail = (person) => {
+    socket.emit("addToFail", person);
   };
 
   const addMission = (passed, mission) => {
@@ -202,9 +208,14 @@ const Game = () => {
           addToFail={addToFail}
           addMission={addMission}
           missions={missions}
+          newPassFail={newPassFail}
         />
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
+      ) : render == "merlin" ? (
+        <>merlin</>
+      ) : render == "results" ? (
+        <>results</>
       ) : null}
     </div>
   );

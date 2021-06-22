@@ -9,6 +9,7 @@ const PassFail = (props) => {
     roll
     */
 
+  const user = props.users.filter((user) => user.id == props.socket.id)[0];
   const [isPassing, setIsPassing] = useState();
 
   const pass = () => {
@@ -21,9 +22,9 @@ const PassFail = (props) => {
 
   const submit = () => {
     if (isPassing) {
-      props.addToPass();
+      props.addToPass(user);
     } else {
-      props.addToFail();
+      props.addToFail(user);
     }
   };
 
@@ -33,18 +34,22 @@ const PassFail = (props) => {
     <>
       <Button onClick={pass} color="success">
         Pass
-      </Button>
+      </Button>{" "}
       {props.roll == "morgana" ||
       props.roll == "minion" ||
       props.roll == "mordred" ||
       props.roll == "oberon" ? (
-        <Button onClick={fail} color="danger">
-          Fail
-        </Button>
+        <>
+          <Button onClick={fail} color="danger">
+            Fail
+          </Button>{" "}
+        </>
       ) : (
-        <Button color="danger" disabled={true}>
-          Fail
-        </Button>
+        <>
+          <Button color="danger" disabled={true}>
+            Fail
+          </Button>{" "}
+        </>
       )}
       {isPassing != undefined ? (
         <Button color="primary" onClick={submit}>

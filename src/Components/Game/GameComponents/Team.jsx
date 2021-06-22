@@ -3,6 +3,7 @@ import { Button } from "reactstrap";
 
 import LastRound from "./LastRound";
 import PassFail from "./PassFail";
+import Missions from "./Missions";
 
 const Team = (props) => {
   useEffect(() => {
@@ -67,6 +68,7 @@ const Team = (props) => {
       props.addMission(passed, props.currentMission);
       //! Left off here
       props.nextKing();
+      // props.newPassFail(false);
       console.log("addMission", passed, props.currentMission);
     }
   }, [props.passesFails]);
@@ -125,9 +127,11 @@ const Team = (props) => {
       ) : (
         <h2>{props.king.username} IS THE KING</h2>
       )}
-      <h5>
-        {props.gameInfo.teams[props.currentMission - 1]} people on this team
-      </h5>
+      <Missions
+        currentMission={props.currentMission}
+        missions={props.missions}
+        gameInfo={props.gameInfo}
+      />
       {props.users.map((user) => (
         <h2
           style={
@@ -148,6 +152,7 @@ const Team = (props) => {
         roll={props.roll}
         passFail={props.passFail}
         socket={props.socket}
+        users={props.users}
         addToPass={props.addToPass}
         addToFail={props.addToFail}
       />
@@ -161,7 +166,7 @@ const Team = (props) => {
         <>
           <Button color="success" onClick={handleAccept}>
             ACCEPT
-          </Button>
+          </Button>{" "}
           <Button color="danger" onClick={handleReject}>
             REJECT
           </Button>
@@ -192,7 +197,7 @@ const Team = (props) => {
         : props.displayVote
         ? "You didn't vote"
         : null}
-      {props.displayVote ? (
+      {/* {props.displayVote ? (
         <>
           <h4>Accepted</h4>
           {props.acceptedPeople.length > 0
@@ -209,8 +214,13 @@ const Team = (props) => {
         </>
       ) : props.voting ? (
         "counting down..."
-      ) : null}
-      <LastRound lastRound={props.lastRound} missions={props.missions} />
+      ) : null} */}
+      <LastRound
+        lastRound={props.lastRound}
+        missions={props.missions}
+        currentMission={props.currentMission}
+        gameInfo={props.gameInfo}
+      />
     </div>
   );
 };
