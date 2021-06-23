@@ -8,23 +8,20 @@ const Join = (props) => {
   const [room, setRoom] = useState(useParams().room);
 
   useEffect(() => {
-    if(username){
-      window.localStorage.setItem('username', username)
+    if (username) {
+      window.localStorage.setItem("username", username);
     }
-  }, [username])
+  }, [username]);
 
   useEffect(() => {
-    if(window.localStorage.getItem('username') != ''){
-      setUsername(window.localStorage.getItem('username'))
+    if (window.localStorage.getItem("username") != "") {
+      setUsername(window.localStorage.getItem("username"));
     }
-    // if(useParams().room){
-    //   setRoom(useParams().room)
-    // }
-  }, [])
+  }, []);
 
   const handleNameChange = (e) => {
-    setUsername(e.target.value)
-  }
+    setUsername(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();

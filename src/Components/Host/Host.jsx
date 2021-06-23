@@ -7,6 +7,18 @@ const Host = () => {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState(makeid(4));
 
+  useEffect(() => {
+    if (username) {
+      window.localStorage.setItem("username", username);
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (window.localStorage.getItem("username") != "") {
+      setUsername(window.localStorage.getItem("username"));
+    }
+  }, []);
+
   function makeid(length) {
     var result = "";
     var characters = "abcdefghijklmnopqrstuvwxyz";
