@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
+import qrCode from 'qrcode'
 
 const Waiting = (props) => {
   const [percivalMorgana, setPercivalMorgana] = useState(true);
   const [oberon, setOberon] = useState(true);
+  const [qrUrl, setQrUrl] = useState('')
+
+  const generateQr = async () => {
+    const response = await qrCode.toDataURL(`https://avalonconnect.herokuapp.com/join/${props.room}`)
+    setQrUrl(response)
+  }
 
   useEffect(() => {
     props.socket.on("roomUsers", ({ room, users }) => {
       props.setUsers(users);
     });
+    generateQr()
   }, []);
+
+  useEffect(() => {
+    console.log(qrUrl)
+  }, [qrUrl])
 
   const startGame = () => {
     props.socket.emit("startGame", {
@@ -78,6 +90,8 @@ const Waiting = (props) => {
           <Button onClick={startGame}>START GAME</Button>
         </>
       ) : null}
+      <br/>
+      {qrUrl ? <img src={qrUrl}/> : null}
     </div>
   );
 };

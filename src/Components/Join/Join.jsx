@@ -1,11 +1,30 @@
-import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Redirect, useParams } from "react-router-dom";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import "./Join.css";
 
-const Join = () => {
+const Join = (props) => {
   const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(useParams().room);
+
+  useEffect(() => {
+    if(username){
+      window.localStorage.setItem('username', username)
+    }
+  }, [username])
+
+  useEffect(() => {
+    if(window.localStorage.getItem('username') != ''){
+      setUsername(window.localStorage.getItem('username'))
+    }
+    // if(useParams().room){
+    //   setRoom(useParams().room)
+    // }
+  }, [])
+
+  const handleNameChange = (e) => {
+    setUsername(e.target.value)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +40,7 @@ const Join = () => {
             <Input
               className="joinUsername"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleNameChange}
               placeholder="Enter name..."
             />
           </Label>

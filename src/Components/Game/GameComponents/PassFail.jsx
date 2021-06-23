@@ -28,8 +28,7 @@ const PassFail = (props) => {
     }
   };
 
-  return props.passFail &&
-    props.onTeam.filter((person) => person.id == props.socket.id).length ==
+  return props.onTeam.filter((person) => person.id == props.socket.id).length ==
       1 ? (
     <>
       <Button onClick={pass} color="success">
@@ -42,18 +41,18 @@ const PassFail = (props) => {
         <>
           <Button onClick={fail} color="danger">
             Fail
-          </Button>{" "}
+          </Button><br/>
         </>
       ) : (
         <>
           <Button color="danger" disabled={true}>
             Fail
-          </Button>{" "}
+          </Button><br/>
         </>
       )}
       {isPassing != undefined ? (
-        <Button color="primary" onClick={submit}>
-          Submit
+        <Button style={{marginTop: '0.5em'}} color="primary" onClick={submit}>
+          {isPassing ? 'Submit pass' : 'Submit fail'}
         </Button>
       ) : null}
     </>

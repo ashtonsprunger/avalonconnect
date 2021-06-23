@@ -31,6 +31,9 @@ const App = () => {
     <div className="App">
       <Router>
         <Switch>
+          <Route exact path="/join/:room">
+            <Join />
+          </Route>
           <Route exact path="/join">
             <Join />
           </Route>
