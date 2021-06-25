@@ -7,6 +7,7 @@ import "./Game.css";
 import Waiting from "./GameComponents/Waiting";
 import Team from "./GameComponents/Team";
 import Roll from "./GameComponents/Roll";
+import Results from "./GameComponents/Results";
 
 let socket;
 
@@ -15,6 +16,7 @@ const Game = () => {
   const [room, setRoom] = useState(useParams().room.toUpperCase());
   const [users, setUsers] = useState([]);
   const [rollOpen, setRollOpen] = useState(true);
+  const [rollClosed, setRollClosed] = useState(false);
   const [host, setHost] = useState(useParams().host === "true" ? true : false);
   const [render, setRender] = useState("waiting");
   const [roll, setRoll] = useState();
@@ -157,9 +159,16 @@ const Game = () => {
       {render !== "waiting" ? (
         <>
           <h2>
-            <Button onClick={toggleRoll}>
-              {rollOpen ? "GOT IT" : username.trim().toUpperCase()}
-            </Button>
+            <Roll
+              newRender={newRender}
+              roll={roll}
+              sees={sees}
+              socket={socket}
+              rollOpen={rollOpen}
+              setRollOpen={setRollOpen}
+              username={username}
+              setRollClosed={setRollClosed}
+            />
           </h2>
         </>
       ) : null}
@@ -175,9 +184,7 @@ const Game = () => {
             setRollOpen={setRollOpen}
           />
         ) : null
-      ) : rollOpen ? (
-        <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
-      ) : render === "team" ? (
+      ) : render === "team" && rollClosed ? (
         <Team
           onTeam={onTeam}
           changeOnTeam={changeOnTeam}
@@ -215,7 +222,7 @@ const Game = () => {
       ) : render == "merlin" ? (
         <>merlin</>
       ) : render == "results" ? (
-        <>results</>
+        <Results missions={missions} />
       ) : null}
     </div>
   );

@@ -11,6 +11,7 @@ const PassFail = (props) => {
 
   const user = props.users.filter((user) => user.id == props.socket.id)[0];
   const [isPassing, setIsPassing] = useState();
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const pass = () => {
     setIsPassing(true);
@@ -23,39 +24,51 @@ const PassFail = (props) => {
   const submit = () => {
     if (isPassing) {
       props.addToPass(user);
+      setHasSubmitted(true);
     } else {
       props.addToFail(user);
+      setHasSubmitted(true);
     }
   };
 
   return props.onTeam.filter((person) => person.id == props.socket.id).length ==
-      1 ? (
-    <>
-      <Button onClick={pass} color="success">
-        Pass
-      </Button>{" "}
-      {props.roll == "morgana" ||
-      props.roll == "minion" ||
-      props.roll == "mordred" ||
-      props.roll == "oberon" ? (
-        <>
-          <Button onClick={fail} color="danger">
-            Fail
-          </Button><br/>
-        </>
-      ) : (
-        <>
-          <Button color="danger" disabled={true}>
-            Fail
-          </Button><br/>
-        </>
-      )}
-      {isPassing != undefined ? (
-        <Button style={{marginTop: '0.5em'}} color="primary" onClick={submit}>
-          {isPassing ? 'Submit pass' : 'Submit fail'}
-        </Button>
-      ) : null}
-    </>
+    1 ? (
+    hasSubmitted ? (
+      <h5>Waiting for team to vote...</h5>
+    ) : (
+      <>
+        <Button onClick={pass} color="success">
+          Pass
+        </Button>{" "}
+        {props.roll == "morgana" ||
+        props.roll == "minion" ||
+        props.roll == "mordred" ||
+        props.roll == "oberon" ? (
+          <>
+            <Button onClick={fail} color="danger">
+              Fail
+            </Button>
+            <br />
+          </>
+        ) : (
+          <>
+            <Button color="danger" disabled={true}>
+              Fail
+            </Button>
+            <br />
+          </>
+        )}
+        {isPassing != undefined ? (
+          <Button
+            style={{ marginTop: "0.5em" }}
+            color={isPassing ? "success" : "danger"}
+            onClick={submit}
+          >
+            {isPassing ? "Submit pass" : "Submit fail"}
+          </Button>
+        ) : null}
+      </>
+    )
   ) : null;
 };
 

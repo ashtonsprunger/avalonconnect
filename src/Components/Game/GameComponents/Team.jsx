@@ -147,58 +147,70 @@ const Team = (props) => {
           {user.username}
         </h2>
       ))}
-      <br/>
-      <h5 style={{color: props.voting == true
-        ? props.acceptedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-          ? "#218838"
+      <br />
+      <h5
+        style={{
+          color:
+            props.voting == true
+              ? props.acceptedPeople.filter(
+                  (item) => item.id == props.socket.id
+                ).length == 1
+                ? "#218838"
+                : props.rejectedPeople.filter(
+                    (item) => item.id == props.socket.id
+                  ).length == 1
+                ? "#dc3545"
+                : null
+              : props.acceptedPeople.filter(
+                  (item) => item.id == props.socket.id
+                ).length == 1
+              ? "#218838"
+              : props.rejectedPeople.filter(
+                  (item) => item.id == props.socket.id
+                ).length == 1
+              ? "#dc3545"
+              : props.displayVote
+              ? "#ffc107"
+              : null,
+        }}
+      >
+        {props.voting == true
+          ? props.acceptedPeople.filter((item) => item.id == props.socket.id)
+              .length == 1
+            ? "You are approving..."
+            : props.rejectedPeople.filter((item) => item.id == props.socket.id)
+                .length == 1
+            ? "You are rejecting..."
+            : null
+          : props.acceptedPeople.filter((item) => item.id == props.socket.id)
+              .length == 1
+          ? "You approved"
           : props.rejectedPeople.filter((item) => item.id == props.socket.id)
               .length == 1
-          ? "#dc3545"
-          : null
-        : props.acceptedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-        ? '#218838'
-        : props.rejectedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-        ? "#dc3545"
-        : props.displayVote
-        ? "#ffc107"
-        : null}}>{props.voting == true
-        ? props.acceptedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-          ? "You are approving..."
-          : props.rejectedPeople.filter((item) => item.id == props.socket.id)
-              .length == 1
-          ? "You are rejecting..."
-          : null
-        : props.acceptedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-        ? 'You approved'
-        : props.rejectedPeople.filter((item) => item.id == props.socket.id)
-            .length == 1
-        ? "You rejected"
-        : props.displayVote
-        ? "You didn't vote"
-        : null}</h5>
+          ? "You rejected"
+          : props.displayVote
+          ? "You didn't vote"
+          : null}
+      </h5>
       {props.passFail == true ? (
         props.onTeam.filter((person) => person.id == props.socket.id).length ==
         1 ? (
-          <h4>You are on the team</h4>
+          <h5>You are on the team</h5>
         ) : (
-          <h4>Waiting for team to vote...</h4>
+          <h5>Waiting for team to vote...</h5>
         )
       ) : null}
-      {props.passFail ? 
-      <PassFail
-        onTeam={props.onTeam}
-        roll={props.roll}
-        passFail={props.passFail}
-        socket={props.socket}
-        users={props.users}
-        addToPass={props.addToPass}
-        addToFail={props.addToFail}
-      /> : null}
+      {props.passFail ? (
+        <PassFail
+          onTeam={props.onTeam}
+          roll={props.roll}
+          passFail={props.passFail}
+          socket={props.socket}
+          users={props.users}
+          addToPass={props.addToPass}
+          addToFail={props.addToFail}
+        />
+      ) : null}
       {props.gameInfo.teams[props.currentMission - 1] == props.onTeam.length &&
       props.socket.id === props.king.id &&
       !props.voting &&
@@ -215,7 +227,7 @@ const Team = (props) => {
           </Button>
         </>
       ) : null}
-      <br/>
+      <br />
 
       <LastRound
         lastRound={props.lastRound}
