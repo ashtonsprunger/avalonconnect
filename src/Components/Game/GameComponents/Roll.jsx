@@ -17,7 +17,16 @@ const Roll = (props) => {
       </Button>
       <Modal isOpen={props.rollOpen}>
         <div id="roll-div">
-          <h3>
+          <h3
+            style={{
+              color:
+                props.roll == "merlin" ||
+                props.roll == "servant" ||
+                props.roll == "percival"
+                  ? "#218838"
+                  : "#dc3545",
+            }}
+          >
             {props.roll === "servant"
               ? "You are a loyal servant of Arthur"
               : props.roll === "percival"
@@ -39,7 +48,7 @@ const Roll = (props) => {
           {props.sees ? (
             props.sees.length != 0 ? (
               <>
-                <h4>you see:</h4>
+                <h4>You see:</h4>
                 <br />
               </>
             ) : null
@@ -53,6 +62,41 @@ const Roll = (props) => {
                 </>
               ))
             : null}
+          <br />
+          <h4>Rolls:</h4>
+          <br />
+          {props.characters == undefined
+            ? null
+            : props.characters.map((character) => {
+                return (
+                  <h5
+                    style={{
+                      color:
+                        character == "merlin" ||
+                        character == "servant" ||
+                        character == "percival"
+                          ? "#218838"
+                          : "#dc3545",
+                    }}
+                  >
+                    {character == "merlin"
+                      ? "Merlin"
+                      : character == "servant"
+                      ? "Loyal servant of Arthur"
+                      : character == "minion"
+                      ? "Minion of Mordred"
+                      : character == "percival"
+                      ? "Percival"
+                      : character == "morgana"
+                      ? "Morgana"
+                      : character == "mordred"
+                      ? "Mordred"
+                      : character == "oberon"
+                      ? "Oberon"
+                      : "Unknown roll!! This is a bug!! You should never see this message!!!"}
+                  </h5>
+                );
+              })}
           <br />
           <Button color="success" onClick={toggleIsOpen}>
             Close

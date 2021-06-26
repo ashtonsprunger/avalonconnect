@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import qrCode from 'qrcode'
+import qrCode from "qrcode";
 
 const Waiting = (props) => {
   const [percivalMorgana, setPercivalMorgana] = useState(true);
   const [oberon, setOberon] = useState(true);
-  const [qrUrl, setQrUrl] = useState('')
+  const [qrUrl, setQrUrl] = useState("");
 
   const generateQr = async () => {
-    const response = await qrCode.toDataURL(`https://avalonconnect.herokuapp.com/join/${props.room}`)
-    setQrUrl(response)
-  }
+    const response = await qrCode.toDataURL(
+      `https://avalonconnect.herokuapp.com/join/${props.room}`
+    );
+    setQrUrl(response);
+  };
 
   useEffect(() => {
     props.socket.on("roomUsers", ({ room, users }) => {
       props.setUsers(users);
     });
-    generateQr()
+    generateQr();
   }, []);
 
   useEffect(() => {
-    console.log(qrUrl)
-  }, [qrUrl])
+    console.log(qrUrl);
+  }, [qrUrl]);
 
   const startGame = () => {
     props.socket.emit("startGame", {
@@ -58,7 +60,7 @@ const Waiting = (props) => {
       {props.host ? (
         <h5 className="hosting">you are hosting</h5>
       ) : (
-        <h5>waiting for host to begin game...</h5>
+        <h5>waiting for host to start game...</h5>
       )}
       {props.users.map((user) => {
         return (
@@ -90,8 +92,8 @@ const Waiting = (props) => {
           <Button onClick={startGame}>START GAME</Button>
         </>
       ) : null}
-      <br/>
-      {qrUrl ? <img src={qrUrl}/> : null}
+      <br />
+      {qrUrl ? <img src={qrUrl} /> : null}
     </div>
   );
 };

@@ -15,6 +15,7 @@ const Game = () => {
   const [username, setUsername] = useState(useParams().username.toUpperCase());
   const [room, setRoom] = useState(useParams().room.toUpperCase());
   const [users, setUsers] = useState([]);
+  const [characters, setCharacters] = useState([]);
   const [rollOpen, setRollOpen] = useState(true);
   const [rollClosed, setRollClosed] = useState(false);
   const [host, setHost] = useState(useParams().host === "true" ? true : false);
@@ -44,7 +45,13 @@ const Game = () => {
     socket.emit("joinRoom", { room, username });
 
     socket.on("roomUsers", ({ room, users }) => {
+      console.log("new users", users);
       setUsers(users);
+    });
+
+    socket.on("characters", (chars) => {
+      setCharacters(chars);
+      console.log(chars);
     });
 
     socket.on("newRender", newRender);
@@ -156,7 +163,7 @@ const Game = () => {
 
   return (
     <div className="gameWrapper">
-      {render !== "waiting" ? (
+      {render !== "waiting" && render !== "results" ? (
         <>
           <h2>
             <Roll
@@ -168,6 +175,7 @@ const Game = () => {
               setRollOpen={setRollOpen}
               username={username}
               setRollClosed={setRollClosed}
+              characters={characters}
             />
           </h2>
         </>
@@ -222,7 +230,7 @@ const Game = () => {
       ) : render == "merlin" ? (
         <>merlin</>
       ) : render == "results" ? (
-        <Results missions={missions} />
+        <Results missions={missions} users={users} />
       ) : null}
     </div>
   );

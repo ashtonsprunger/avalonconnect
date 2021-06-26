@@ -132,6 +132,11 @@ const Team = (props) => {
         missions={props.missions}
         gameInfo={props.gameInfo}
       />
+      {props.gameInfo.twoFails && props.currentMission == 4 ? (
+        <h5 style={{ color: "#dc3545" }}>
+          This mission requires 2 fails to fail
+        </h5>
+      ) : null}
       {props.users.map((user) => (
         <h2
           style={
