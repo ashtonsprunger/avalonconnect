@@ -122,7 +122,7 @@ const Team = (props) => {
     <div>
       {props.king.id === props.socket.id ? (
         <>
-          <h2>YOU ARE THE KING</h2>
+          <h2 style={{ color: "#007bff" }}>YOU ARE THE KING</h2>
         </>
       ) : (
         <h2>{props.king.username} IS THE KING</h2>
@@ -138,19 +138,28 @@ const Team = (props) => {
         </h5>
       ) : null}
       {props.users.map((user) => (
-        <h2
+        <h3
           style={
             userInUsers(user, props.onTeam)[0]
+              ? user.id == props.socket.id
+                ? {
+                    backgroundColor: "#6c757d",
+                    color: "#007bff",
+                  }
+                : {
+                    backgroundColor: "#6c757d",
+                    color: "white",
+                  }
+              : user.id == props.socket.id
               ? {
-                  backgroundColor: "grey",
-                  color: "white",
+                  color: "#007bff",
                 }
               : {}
           }
           onClick={() => toggleOnTeam(user)}
         >
           {user.username}
-        </h2>
+        </h3>
       ))}
       <br />
       <h5

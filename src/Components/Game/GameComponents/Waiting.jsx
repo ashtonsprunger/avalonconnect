@@ -7,6 +7,25 @@ const Waiting = (props) => {
   const [oberon, setOberon] = useState(true);
   const [qrUrl, setQrUrl] = useState("");
 
+  function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+      var k = new_index - arr.length + 1;
+      while (k--) {
+        arr.push(undefined);
+      }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing
+  }
+
+  const moveUp = (index) => {
+    props.rearrange(array_move(props.users, index, index + 1));
+  };
+
+  const moveDown = (index) => {
+    props.rearrange(array_move(props.users, index, index - 1));
+  };
+
   const generateQr = async () => {
     const response = await qrCode.toDataURL(
       `https://avalonconnect.herokuapp.com/join/${props.room}`
@@ -29,6 +48,7 @@ const Waiting = (props) => {
     props.socket.emit("startGame", {
       percivalMorgana: percivalMorgana,
       oberon: oberon,
+      usersP: props.users,
     });
     props.changeRender("team");
     // props.setRollOpen
@@ -62,15 +82,22 @@ const Waiting = (props) => {
       ) : (
         <h5>waiting for host to start game...</h5>
       )}
-      {props.users.map((user) => {
+      {props.users.map((user, index) => {
         return (
-          <h2
+          <h3
             style={{
-              color: `${props.socket.id == user.id ? "blue" : "black"}`,
+              color: `${props.socket.id == user.id ? "#007bff" : "black"}`,
             }}
           >
-            {user.username}
-          </h2>
+            {user.username}{" "}
+            {props.host ? (
+              <span>
+                {index > 0 ? (
+                  <Button onClick={() => moveDown(index)}>^</Button>
+                ) : null}
+              </span>
+            ) : null}
+          </h3>
         );
       })}
       {props.host ? (
@@ -90,9 +117,9 @@ const Waiting = (props) => {
           <br />
           <br />
           <Button onClick={startGame}>START GAME</Button>
+          <br />
         </>
       ) : null}
-      <br />
       {qrUrl ? <img src={qrUrl} /> : null}
     </div>
   );

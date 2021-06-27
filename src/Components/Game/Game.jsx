@@ -8,6 +8,7 @@ import Waiting from "./GameComponents/Waiting";
 import Team from "./GameComponents/Team";
 import Roll from "./GameComponents/Roll";
 import Results from "./GameComponents/Results";
+import Merlin from "./GameComponents/Merlin";
 
 let socket;
 
@@ -35,6 +36,7 @@ const Game = () => {
   const [passFail, setPassFail] = useState(false);
   const [passesFails, setPassesFails] = useState([]);
   const [lastRound, setLastRound] = useState();
+  const [merlinCorrect, setMerlinCorrect] = useState();
 
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
@@ -48,6 +50,8 @@ const Game = () => {
       console.log("new users", users);
       setUsers(users);
     });
+
+    socket.on("rearrange", setUsers);
 
     socket.on("characters", (chars) => {
       setCharacters(chars);
@@ -79,6 +83,10 @@ const Game = () => {
   const callVote = () => {
     setKingStarted(true);
     setVoting(true);
+  };
+
+  const rearrange = (newUsers) => {
+    socket.emit("rearrange", newUsers);
   };
 
   const newRender = (newR) => {
@@ -190,6 +198,7 @@ const Game = () => {
             setUsers={setUsers}
             socket={socket}
             setRollOpen={setRollOpen}
+            rearrange={rearrange}
           />
         ) : null
       ) : render === "team" && rollClosed ? (
@@ -228,9 +237,17 @@ const Game = () => {
       ) : render === "roll" ? (
         <Roll newRender={newRender} roll={roll} sees={sees} socket={socket} />
       ) : render == "merlin" ? (
-        <>merlin</>
+        <Merlin
+          users={users}
+          socket={socket}
+          setMerlinCorrect={setMerlinCorrect}
+        />
       ) : render == "results" ? (
-        <Results missions={missions} users={users} />
+        <Results
+          users={users}
+          missions={missions}
+          merlinCorrect={merlinCorrect}
+        />
       ) : null}
     </div>
   );

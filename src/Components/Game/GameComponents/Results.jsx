@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Results = (props) => {
-  const [nums, setNums] = useState(["1st", "2nd", "3rd", "4th", "5th"]);
+  const [nums, setNums] = useState(["1ST", "2ND", "3RD", "4TH", "5TH"]);
 
   return (
     <>
@@ -40,7 +40,9 @@ const Results = (props) => {
       <h3>Missions</h3>
       {props.missions.map((mission, index) => {
         return (
-          <h4>{`${nums[index]} mission - ${mission ? "PASSED" : "FAILED"}`}</h4>
+          <h4 style={{ color: mission ? "#218838" : "#dc3545" }}>{`${
+            nums[index]
+          } MISSION - ${mission ? "PASSED" : "FAILED"}`}</h4>
         );
       })}
     </>
