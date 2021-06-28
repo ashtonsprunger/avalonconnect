@@ -143,8 +143,8 @@ const Team = (props) => {
             userInUsers(user, props.onTeam)[0]
               ? user.id == props.socket.id
                 ? {
-                    backgroundColor: "#6c757d",
-                    color: "#007bff",
+                    backgroundColor: "#007bff",
+                    color: "white",
                   }
                 : {
                     backgroundColor: "#6c757d",

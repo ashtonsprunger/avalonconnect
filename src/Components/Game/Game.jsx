@@ -37,6 +37,9 @@ const Game = () => {
   const [passesFails, setPassesFails] = useState([]);
   const [lastRound, setLastRound] = useState();
   const [merlinCorrect, setMerlinCorrect] = useState();
+  const [badPeople, setBadPeople] = useState([]);
+  const [goodPeople, setGoodPeople] = useState([]);
+  const [chosenOne, setChosenOne] = useState();
 
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
@@ -78,6 +81,10 @@ const Game = () => {
     socket.on("lastRound", setLastRound);
     socket.on("missions", setMissions);
     socket.on("currentMission", setCurrentMission);
+    socket.on("badPeople", setBadPeople);
+    socket.on("goodPeople", setGoodPeople);
+    socket.on("chosenOne", setChosenOne);
+    socket.on("merlinCorrect", setMerlinCorrect);
   }, []);
 
   const callVote = () => {
@@ -241,6 +248,9 @@ const Game = () => {
           users={users}
           socket={socket}
           setMerlinCorrect={setMerlinCorrect}
+          chosenOne={chosenOne}
+          badPeople={badPeople}
+          goodPeople={goodPeople}
         />
       ) : render == "results" ? (
         <Results

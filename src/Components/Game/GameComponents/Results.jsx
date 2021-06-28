@@ -5,6 +5,24 @@ const Results = (props) => {
 
   return (
     <>
+      {props.merlinCorrect != undefined ? (
+        props.merlinCorrect ? (
+          <>
+            <h2 style={{ color: "#dc3545" }}>Bad guys win!</h2>
+            <h5>Merlin was guessed correctly</h5>
+          </>
+        ) : (
+          <>
+            <h2 style={{ color: "#218838" }}>Good guys win!</h2>
+            <h5>Merlin was guessed incorrectly</h5>
+          </>
+        )
+      ) : props.missions.filter((mission) => mission).length == 3 ? (
+        <h2 style={{ color: "#218838" }}>Good guys win!</h2>
+      ) : (
+        <h2 style={{ color: "#dc3545" }}>Bad guys win!</h2>
+      )}
+      <br />
       <h3>Characters</h3>
       {props.users.map((user) => {
         return (
@@ -37,6 +55,7 @@ const Results = (props) => {
           </h5>
         );
       })}
+      <br />
       <h3>Missions</h3>
       {props.missions.map((mission, index) => {
         return (
