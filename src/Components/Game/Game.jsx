@@ -9,6 +9,7 @@ import Team from "./GameComponents/Team";
 import Roll from "./GameComponents/Roll";
 import Results from "./GameComponents/Results";
 import Merlin from "./GameComponents/Merlin";
+import Loading from "../Game/Loading";
 
 let socket;
 
@@ -196,7 +197,7 @@ const Game = () => {
         </>
       ) : null}
       {render === "waiting" ? (
-        socket ? (
+        socket && users ? (
           <Waiting
             changeRender={changeRender}
             host={host}
@@ -207,7 +208,9 @@ const Game = () => {
             setRollOpen={setRollOpen}
             rearrange={rearrange}
           />
-        ) : null
+        ) : (
+          <Loading />
+        )
       ) : render === "team" && rollClosed ? (
         <Team
           onTeam={onTeam}
