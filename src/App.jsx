@@ -9,6 +9,8 @@ import {
   Switch,
 } from "react-router-dom";
 
+import Home from "./Components/Game/Home";
+import Settings from "./Components/Game/Settings";
 import Game from "./Components/Game/Game";
 import Join from "./Components/Join/Join";
 import Host from "./Components/Host/Host";
@@ -40,8 +42,11 @@ const App = () => {
           <Route exact path="/host">
             <Host />
           </Route>
+          <Route exact path="/settings">
+            <Settings />
+          </Route>
           <Route exact path="/">
-            <Redirect to="/join" />
+            <Home />
           </Route>
           <Route path="/game/:username/:room/:host">
             <Game />

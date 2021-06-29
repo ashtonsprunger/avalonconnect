@@ -1,3 +1,28 @@
+.nav {
+  display: grid;
+  justify-content: space-between;
+  padding-bottom: 1em;
+}
+
+.wrapper {
+  padding: 1em;
+}
+
+.homeMenuItem {
+  font-size: 40px;
+  background-color: black;
+  width: fit-content;
+  margin: auto;
+  padding: 5px 15px 6px;
+  color: white;
+  border-radius: 12px;
+}
+
+.homeMenuItem:hover {
+  color: white;
+  text-decoration: none;
+}
+
 .App {
   text-align: center;
 }

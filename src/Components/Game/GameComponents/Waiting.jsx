@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import qrCode from "qrcode";
 
+import QR from "./QR";
+
 const Waiting = (props) => {
   const [percivalMorgana, setPercivalMorgana] = useState(true);
   const [oberon, setOberon] = useState(true);
@@ -120,7 +122,7 @@ const Waiting = (props) => {
           <br />
         </>
       ) : null}
-      {qrUrl ? <img src={qrUrl} /> : null}
+      {qrUrl ? <QR src={qrUrl} /> : null}
     </div>
   );
 };

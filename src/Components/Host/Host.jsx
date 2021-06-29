@@ -8,12 +8,6 @@ const Host = () => {
   const [room, setRoom] = useState(makeid(4));
 
   useEffect(() => {
-    if (username) {
-      window.localStorage.setItem("username", username);
-    }
-  }, [username]);
-
-  useEffect(() => {
     if (window.localStorage.getItem("username") != "") {
       setUsername(window.localStorage.getItem("username"));
     }
@@ -36,7 +30,12 @@ const Host = () => {
   useEffect(() => {}, []);
 
   return (
-    <div>
+    <div className="wrapper">
+      <div className="nav">
+        <Link className="back" to="/">
+          Back
+        </Link>
+      </div>
       <Form onSubmit={handleSubmit}>
         <h2>Host a Game</h2>
         <FormGroup className="formGroup">
@@ -62,10 +61,9 @@ const Host = () => {
           }
           to={`/game/${username}/${room}/true`}
         >
-          HOST
+          Host
         </Link>
       </Form>
-      <Link to="/join">join a game</Link>
     </div>
   );
 };

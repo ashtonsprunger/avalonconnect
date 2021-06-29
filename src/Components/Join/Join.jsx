@@ -6,16 +6,18 @@ import "./Join.css";
 const Join = (props) => {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState(useParams().room);
-
-  useEffect(() => {
-    if (username) {
-      window.localStorage.setItem("username", username);
-    }
-  }, [username]);
+  const [enterRoom, setEnterRoom] = useState(false);
 
   useEffect(() => {
     if (window.localStorage.getItem("username") != "") {
       setUsername(window.localStorage.getItem("username"));
+    }
+    if (
+      room &&
+      localStorage.getItem("username") != "" &&
+      localStorage.getItem("enterGame") == "true"
+    ) {
+      setEnterRoom(true);
     }
   }, []);
 
@@ -28,7 +30,13 @@ const Join = (props) => {
   };
 
   return (
-    <div className="joinWrapper">
+    <div className="wrapper">
+      {enterRoom ? <Redirect to={`/game/${username}/${room}/false`} /> : null}
+      <div className="nav">
+        <Link className="back" to="/">
+          Back
+        </Link>
+      </div>
       <Form onSubmit={handleSubmit}>
         <h2>Join a Game</h2>
         <FormGroup className="formGroup">
@@ -64,10 +72,9 @@ const Join = (props) => {
           }
           to={`/game/${username}/${room}/false`}
         >
-          JOIN
+          Join
         </Link>
       </Form>
-      <Link to="/host">host a game</Link>
     </div>
   );
 };
