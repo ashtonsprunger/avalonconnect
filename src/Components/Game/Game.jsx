@@ -11,6 +11,8 @@ import Results from "./GameComponents/Results";
 import Merlin from "./GameComponents/Merlin";
 import Loading from "../Game/Loading";
 
+import UseUnsavedChangesWarning from "../Game/UseUnsavedChangesWarning";
+
 let socket;
 
 const Game = () => {
@@ -42,10 +44,13 @@ const Game = () => {
   const [goodPeople, setGoodPeople] = useState([]);
   const [chosenOne, setChosenOne] = useState();
 
+  const [Prompt, setDirty, setClean] = UseUnsavedChangesWarning();
+
   useEffect(() => {
     socket = io("avalonconnect-server.herokuapp.com"); //! FOR HEROKU
     // socket = io("localhost:3333"); //! FOR LOCAL
     console.log("SOCKET", socket);
+    setDirty();
 
     //! joining the game room
     socket.emit("joinRoom", { room, username });
@@ -86,6 +91,8 @@ const Game = () => {
     socket.on("goodPeople", setGoodPeople);
     socket.on("chosenOne", setChosenOne);
     socket.on("merlinCorrect", setMerlinCorrect);
+
+    document.body.onbeforeunload = "return pageUnload()";
   }, []);
 
   const callVote = () => {
@@ -177,6 +184,10 @@ const Game = () => {
     setRollOpen(!rollOpen);
   };
 
+  function pageUnload() {
+    return "The data on this page will be lost if you leave";
+  }
+
   return (
     <div className="gameWrapper">
       {render !== "waiting" && render !== "results" ? (
@@ -262,6 +273,7 @@ const Game = () => {
           merlinCorrect={merlinCorrect}
         />
       ) : null}
+      {Prompt}
     </div>
   );
 };
