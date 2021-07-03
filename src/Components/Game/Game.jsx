@@ -208,7 +208,7 @@ const Game = () => {
         </>
       ) : null}
       {render === "waiting" ? (
-        socket && users ? (
+        socket && users.length > 0 ? (
           <Waiting
             changeRender={changeRender}
             host={host}
