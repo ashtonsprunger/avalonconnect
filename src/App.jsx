@@ -2,7 +2,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import queryString from "querystring";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Link,
   Route,
   Redirect,
